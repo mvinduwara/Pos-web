@@ -6,6 +6,8 @@ import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import { errorHandler } from './middleware/errorMiddleware.js';
+
 
 dotenv.config();
 
@@ -20,6 +22,8 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 5000;
+
+app.use(errorHandler);
 
 const startServer = async () => {
   try {
