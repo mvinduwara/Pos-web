@@ -1,59 +1,53 @@
 import { Product } from '../models/index.js';
+import AppError from '../utils/AppError.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 
-export const getAllProducts = async (req, res) => {
-  try {
-    const products = await Product.findAll();
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching products', error: error.message });
-  }
-};
+export const getAllProducts = asyncHandler(async (req, res, next) => {
+  const products = await Product.findAll();
+  res.status(200).json(products);
+});
 
-export const getProductById = async (req, res) => {
-  try {
-    const product = await Product.findByPk(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching product', error: error.message });
+export const getProductById = asyncHandler(async (req, res, next) => {
+  const product = await Product.findByPk(req.params.id);
+  
+  if (!product) {
+    return next(new AppError('Product not found', 404));
   }
-};
+  
+  res.status(200).json(product);
+});
 
-export const createProduct = async (req, res) => {
-  try {
-    const { sku, name, price, stock, category } = req.body;
-    const newProduct = await Product.create({ sku, name, price, stock, category });
-    res.status(201).json(newProduct);
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating product', error: error.message });
-  }
-};
+export const createProduct = asyncHandler(async (req, res, next) => {
+  const { sku, name, price, stock, category } = req.body;
+  const newProduct = await Product.create({ sku, name, price, stock, category });
+  res.status(201).json(newProduct);
+});
 
-export const updateProduct = async (req, res) => {
-  try {
-    const { sku, name, price, stock, category } = req.body;
-    const product = await Product.findByPk(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-    await product.update({ sku, name, price, stock, category });
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating product', error: error.message });
+export const updateProduct = asyncHandler(async (req, res, next) => {
+  const product = await Product.findByPk(req.params.id);
+  
+  if (!product) {
+    return next(new AppError('Product not found', 404));
   }
-};
+  
+  await product.update({ 
+    sku: req.body.sku, 
+    name: req.body.name, 
+    price: req.body.price, 
+    stock: req.body.stock, 
+    category: req.body.category 
+  });
+  
+  res.status(200).json(product);
+});
 
-export const deleteProduct = async (req, res) => {
-  try {
-    const product = await Product.findByPk(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-    await product.destroy();
-    res.status(200).json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting product', error: error.message });
+export const deleteProduct = asyncHandler(async (req, res, next) => {
+  const product = await Product.findByPk(req.params.id);
+  
+  if (!product) {
+    return next(new AppError('Product not found', 404));
   }
-};
+  
+  await product.destroy();
+  res.status(200).json({ message: 'Product deleted successfully' });
+});
