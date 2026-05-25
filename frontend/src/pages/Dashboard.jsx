@@ -61,7 +61,7 @@ export default function Dashboard() {
                     >
                         Inventory
                     </button>
-                     <button
+                    <button
                         onClick={() => navigate('/users')}
                         className="border border-slate-200 text-slate-600 px-5 py-2 rounded-lg font-semibold hover:bg-slate-50 transition-all"
                     >
@@ -72,6 +72,12 @@ export default function Dashboard() {
                         className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 shadow-sm transition-all"
                     >
                         Launch POS
+                    </button>
+                    <button
+                        onClick={() => navigate('/transactions')}
+                        className="border border-slate-200 text-slate-600 px-5 py-2 rounded-lg font-semibold hover:bg-slate-50 transition-all"
+                    >
+                        History
                     </button>
                     <button
                         onClick={handleLogout}
