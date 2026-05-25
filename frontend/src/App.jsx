@@ -5,6 +5,7 @@ import Inventory from './pages/Inventory';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import usePosStore from './store/usePosStore';
+import Transactions from './pages/Transactions';
 
 const AdminRoute = ({ children }) => {
   const user = usePosStore((state) => state.user);
@@ -20,12 +21,11 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         
-        {/* Admin Only Routes */}
         <Route path="/dashboard" element={<AdminRoute><Dashboard /></AdminRoute>} />
         <Route path="/inventory" element={<AdminRoute><Inventory /></AdminRoute>} />
         <Route path="/users" element={<AdminRoute><Users /></AdminRoute>} />
-        
-        {/* All Authenticated Users */}
+        <Route path="/transactions" element={<AdminRoute><Transactions /></AdminRoute>} />
+   
         <Route path="/pos" element={<PosTerminal />} />
       </Routes>
     </Router>
